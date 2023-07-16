@@ -1,0 +1,43 @@
+from collections import defaultdict
+
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
+
+def bfs(city, r, c, i, j, visited):
+    queue = [(i, j)]
+    visited[i][j] = True
+    while queue:
+        x, y = queue.pop(0)
+        for k in range(4):
+            a, b = x + dx[k], y + dy[k]
+            if 0 <= a < r and 0 <= b < c and city[a][b] == '#' and not visited[a][b]:
+                queue.append((a, b))
+                visited[a][b] = True
+
+def main():
+    t = 1
+    while True:
+        r, c = map(int, input().split())
+        if r == 0 and c == 0:
+            break
+        city = [input().strip() for i in range(r)]
+        visited = [[False for j in range(c)] for i in range(r)]
+        components = defaultdict(int)
+        component_id = 0
+        for i in range(r):
+            for j in range(c):
+                if city[i][j] == '#' and not visited[i][j]:
+                    bfs(city, r, c, i, j, visited)
+                    component_id += 1
+        if component_id == 0:
+            print("City %d\nNo bridges are needed." % t)
+        elif component_id == 1:
+            print("City %d\nNo bridges are possible." % t)
+        else:
+            print("City %d\n%d disconnected groups" % (t, component_id))
+        t += 1
+        print()
+
+if __name__ == '__main__':
+    main()
+
